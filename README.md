@@ -1,2 +1,3 @@
-# rfm
+# rfm-cli
+
 React Frontend Maker or Rim Forming Machine...

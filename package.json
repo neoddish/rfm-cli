@@ -1,0 +1,50 @@
+{
+  "name": "rfm-cli",
+  "version": "0.1.0-alpha.0",
+  "description": "React Frontend Maker or Rim Forming Machine...",
+  "main": "src/index.js",
+  "bin": {
+    "rfm-cli": "bin/main.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "templates"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-cli": "rfm-cli -t temp/testRepo",
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neoddish/rfm-cli.git"
+  },
+  "keywords": [
+    "cli",
+    "react",
+    "scaffold"
+  ],
+  "author": {
+    "name": "Jiazhe Wang",
+    "url": "https://github.com/neoddish"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/neoddish/rfm-cli/issues"
+  },
+  "homepage": "https://github.com/neoddish/rfm-cli#readme",
+  "dependencies": {
+    "commander": "^9.2.0",
+    "esm": "^3.2.25",
+    "fs-extra": "^10.1.0",
+    "node-fetch": "^3.2.4",
+    "tslib": "^2.4.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.13",
+    "@types/node": "^17.0.30",
+    "typescript": "^4.6.4"
+  }
+}
