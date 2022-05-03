@@ -2,8 +2,17 @@ import path from "path";
 
 import { program } from "commander";
 
-import { genPackageJson } from "./generators";
+import {
+  genPackageJson,
+  genReadme,
+  genGitignore,
+  genTsconfigJson,
+  cfgHusky,
+  genEditorconfig,
+} from "./generators";
 import { getModuleRoot, ModuleRoot } from "./utils";
+
+import type { GenPackageJsonOptions } from "./generators";
 
 interface Options {
   target: string;
@@ -42,9 +51,41 @@ export async function main() {
 
   const { target: projectRoot } = options;
 
-  // to organize
+  // to organize - paths
+
   const packageJsonPath = path.resolve(projectRoot, "package.json");
+  const readmePath = path.resolve(projectRoot, "README.md");
+  const gitignorePath = path.resolve(projectRoot, ".gitignore");
+  const tsconfigJsonPath = path.resolve(projectRoot, "tsconfig.json");
+  const editorconfigPath = path.resolve(projectRoot, ".editorconfig");
+
+  // to compute - configs
+
+  const packageJsonOption: GenPackageJsonOptions = {
+    deps: {},
+    devDeps: {},
+    cfgs: {},
+  };
+
+  // typescript
+  packageJsonOption.devDeps.typescript = "latest";
+
+  // husky
+  const { cfgs: cfgsFromHusky, deps: depsFromHusky } = cfgHusky({
+    hooks: ["commit-msg", "pre-commit"],
+  });
+  depsFromHusky.forEach((dep) => {
+    packageJsonOption.devDeps[dep] = "latest";
+  });
+  Object.keys(cfgsFromHusky).forEach((key) => {
+    packageJsonOption.cfgs[key] = cfgsFromHusky[key];
+  });
 
   // to write
-  await genPackageJson(packageJsonPath, { privatePackage: true });
+
+  await genPackageJson(packageJsonPath, packageJsonOption);
+  await genReadme(readmePath);
+  await genGitignore(gitignorePath);
+  await genTsconfigJson(tsconfigJsonPath);
+  await genEditorconfig(editorconfigPath);
 }

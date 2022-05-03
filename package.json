@@ -14,7 +14,8 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "test-cli": "rfm-cli -t temp/testRepo",
+    "pre-test-cli": "npm link",
+    "test-cli": "rm -r temp && rfm-cli -t temp/testRepo",
     "build": "tsc",
     "watch": "tsc -w",
     "prepublishOnly": "npm run build"

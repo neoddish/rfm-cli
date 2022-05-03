@@ -57,5 +57,29 @@ export const PATH_GETTERS = {
         get: () => path.resolve(templateDir(), "package-json", "package.json"),
       },
     },
+    README: {
+      DEFAULT: {
+        get: () => path.resolve(templateDir(), "readme-md", "readme.md"),
+      },
+    },
+    GITIGNORE: {
+      LITE: {
+        get: () => path.resolve(templateDir(), "gitignore", "gitignore-lite"),
+      },
+      PRO: {
+        get: () => path.resolve(templateDir(), "gitignore", "gitignore-pro"),
+      },
+    },
+    TSCONFIG_JSON: {
+      DEFAULT: {
+        get: () =>
+          path.resolve(templateDir(), "tsconfig-json", "tsconfig.json"),
+      },
+    },
+    EDITORCONFIG: {
+      DEFAULT: {
+        get: () => path.resolve(templateDir(), "editorconfig", ".editorconfig"),
+      },
+    },
   },
 };
