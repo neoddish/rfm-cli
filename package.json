@@ -1,6 +1,6 @@
 {
   "name": "rfm-cli",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-alpha.1",
   "description": "React Frontend Maker or Rim Forming Machine...",
   "main": "src/index.js",
   "bin": {
@@ -9,13 +9,15 @@
   "files": [
     "bin",
     "src",
+    "lib",
     "templates"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "test-cli": "rfm-cli -t temp/testRepo",
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
