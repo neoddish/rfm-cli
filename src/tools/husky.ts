@@ -4,7 +4,7 @@ import type { ToolOptions, PackageJsonScript } from "../models/Tool";
 
 type HuskyHook = "pre-commit" | "commit-msg";
 
-interface HuskyToolOptions {
+export interface HuskyCreateOptions {
   hooks: HuskyHook[];
 }
 
@@ -15,7 +15,7 @@ export class HuskyTool extends Tool {
     super(HuskyTool.toolName);
   }
 
-  static async create(options: HuskyToolOptions) {
+  static async create(options: HuskyCreateOptions) {
     const configs: any = { husky: { hook: {} } };
     const deps: { name: string; version?: string }[] = [];
 

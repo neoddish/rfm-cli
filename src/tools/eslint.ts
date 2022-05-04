@@ -36,7 +36,7 @@ export class EslintTool extends Tool {
       "prettier",
     ];
 
-    // todo ts or js or react
+    // todo manifest: ts or js or react
     // if ts
     eslintDevDepsArr.push(
       ...["@typescript-eslint/eslint-plugin", "@typescript-eslint/parser"]

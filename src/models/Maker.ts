@@ -7,6 +7,7 @@ import { HuskyTool } from "../tools/husky";
 import { EslintTool } from "../tools/eslint";
 import { PrettierTool } from "../tools/prettier";
 import { JestTool } from "../tools/jest";
+import { RollupTool } from "../tools/rollup";
 
 export interface MakerParams {
   moduleRoot: string;
@@ -93,6 +94,25 @@ export class Maker {
     // jest
     const jestTool = await JestTool.create(this.templateLib);
     await jestTool.dispatch(repo);
+
+    // rollup
+    const rollupTool = await RollupTool.create(this.templateLib);
+    await rollupTool.dispatch(repo);
+
+    // build
+    // todo manifest: if lib or esm or dist
+
+    // "build": "run-p build:*",
+    repo.packageManager.updateScript("build", "run-p build:*", "append");
+    // "clean": "rimraf lib esm dist",
+    repo.packageManager.updateScript("clean", "rimraf lib esm dist", "append");
+
+    repo.packageManager.overwriteJson("main", "lib/index.js");
+    repo.packageManager.overwriteJson("module", "esm/index.js");
+    repo.packageManager.overwriteJson("unpkg", "dist/index.js");
+    repo.packageManager.overwriteJson("files", ["src", "esm", "lib"]);
+
+    // set repo
 
     this.repo = repo;
   }

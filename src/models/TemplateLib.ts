@@ -32,6 +32,9 @@ export class TemplateLib {
     JEST_CONFIG_JS: {
       DEFAULT: "jest-config-js/jest.config.js",
     },
+    ROLLUP_CONFIG_JS: {
+      DEFAULT: "rollup-config-js/rollup.config.js",
+    },
   };
 
   private templateDir: string;
