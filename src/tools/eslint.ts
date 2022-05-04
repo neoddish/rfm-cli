@@ -52,14 +52,18 @@ export class EslintTool extends Tool {
       devDeps: [{ name: EslintTool.toolName }, ...eslintDevDeps],
       packageJsonScripts: scripts,
       configFiles: [
-        await File.newFileBySource(
-          ".eslintrc.js",
-          templateLib.absPathByToken(TemplateLib.TOKEN.ESLINTRC_JS.DEFAULT)
-        ),
-        await File.newFileBySource(
-          ".eslintignore",
-          templateLib.absPathByToken(TemplateLib.TOKEN.ESLINTIGNORE.DEFAULT)
-        ),
+        {
+          file: await File.newFileBySource(
+            ".eslintrc.js",
+            templateLib.absPathByToken(TemplateLib.TOKEN.ESLINTRC_JS.DEFAULT)
+          ),
+        },
+        {
+          file: await File.newFileBySource(
+            ".eslintignore",
+            templateLib.absPathByToken(TemplateLib.TOKEN.ESLINTIGNORE.DEFAULT)
+          ),
+        },
       ],
     };
 

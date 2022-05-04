@@ -15,10 +15,12 @@ export class PrettierTool extends Tool {
     const toolOpts: ToolOptions = {
       devDeps: [{ name: PrettierTool.toolName }],
       configFiles: [
-        await File.newFileBySource(
-          ".prettierrc.js",
-          templateLib.absPathByToken(TemplateLib.TOKEN.PRETTIERRC_JS.DEFAULT)
-        ),
+        {
+          file: await File.newFileBySource(
+            ".prettierrc.js",
+            templateLib.absPathByToken(TemplateLib.TOKEN.PRETTIERRC_JS.DEFAULT)
+          ),
+        },
       ],
     };
 

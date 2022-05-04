@@ -6,6 +6,7 @@ import { TypescriptTool } from "../tools/typescript";
 import { HuskyTool } from "../tools/husky";
 import { EslintTool } from "../tools/eslint";
 import { PrettierTool } from "../tools/prettier";
+import { JestTool } from "../tools/jest";
 
 export interface MakerParams {
   moduleRoot: string;
@@ -78,6 +79,10 @@ export class Maker {
     // prettier
     const prettierTool = await PrettierTool.create(this.templateLib);
     await prettierTool.dispatch(repo);
+
+    // jest
+    const jestTool = await JestTool.create(this.templateLib);
+    await jestTool.dispatch(repo);
 
     this.repo = repo;
   }

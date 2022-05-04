@@ -15,10 +15,12 @@ export class TypescriptTool extends Tool {
     const toolOpts: ToolOptions = {
       devDeps: [{ name: TypescriptTool.toolName }],
       configFiles: [
-        await File.newFileBySource(
-          "tsconfig.json",
-          templateLib.absPathByToken(TemplateLib.TOKEN.TSCONFIG_JSON.DEFAULT)
-        ),
+        {
+          file: await File.newFileBySource(
+            "tsconfig.json",
+            templateLib.absPathByToken(TemplateLib.TOKEN.TSCONFIG_JSON.DEFAULT)
+          ),
+        },
       ],
     };
 

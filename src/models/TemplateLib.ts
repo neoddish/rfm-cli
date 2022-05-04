@@ -29,6 +29,9 @@ export class TemplateLib {
     PRETTIERRC_JS: {
       DEFAULT: "prettierrc-js/.prettierrc.js",
     },
+    JEST_CONFIG_JS: {
+      DEFAULT: "jest-config-js/jest.config.js",
+    },
   };
 
   private templateDir: string;

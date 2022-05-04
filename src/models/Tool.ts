@@ -12,7 +12,7 @@ export interface ToolOptions {
   devDeps?: { name: string; version?: string }[];
   packageJsonConfig?: any;
   packageJsonScripts?: PackageJsonScript[];
-  configFiles?: File[];
+  configFiles?: { file: File; dir?: string }[];
 }
 
 export class Tool {
@@ -20,7 +20,7 @@ export class Tool {
   private deps?: { name: string; version?: string }[];
   private devDeps?: { name: string; version?: string }[];
   private packageJsonConfig?: any;
-  private configFiles?: File[];
+  private configFiles?: { file: File; dir?: string }[];
   private packageJsonScripts?: PackageJsonScript[];
 
   constructor(name: string) {
@@ -76,9 +76,9 @@ export class Tool {
     // config file
     if (this.configFiles && this.configFiles.length) {
       await Promise.all(
-        this.configFiles.map((file) => {
+        this.configFiles.map(({ file, dir }) => {
           async function add() {
-            await repo.addFile("./", file);
+            await repo.addFile(dir || "./", file);
           }
           return add();
         })
