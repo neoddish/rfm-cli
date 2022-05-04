@@ -8,6 +8,7 @@ import { EslintTool } from "../tools/eslint";
 import { PrettierTool } from "../tools/prettier";
 import { JestTool } from "../tools/jest";
 import { RollupTool } from "../tools/rollup";
+import { MarkdownlintTool } from "../tools/markdownlint";
 
 export interface MakerParams {
   moduleRoot: string;
@@ -90,6 +91,10 @@ export class Maker {
     // prettier
     const prettierTool = await PrettierTool.create(this.templateLib);
     await prettierTool.dispatch(repo);
+
+    // markdownlint
+    const markdownlintTool = await MarkdownlintTool.create(this.templateLib);
+    await markdownlintTool.dispatch(repo);
 
     // jest
     const jestTool = await JestTool.create(this.templateLib);

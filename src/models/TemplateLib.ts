@@ -35,6 +35,9 @@ export class TemplateLib {
     ROLLUP_CONFIG_JS: {
       DEFAULT: "rollup-config-js/rollup.config.js",
     },
+    MARKDOWNLINT_JSON: {
+      DEFAULT: "markdownlint-json/.markdownlint.json",
+    },
   };
 
   private templateDir: string;
