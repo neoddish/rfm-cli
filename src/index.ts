@@ -2,17 +2,7 @@ import path from "path";
 
 import { program } from "commander";
 
-import {
-  genPackageJson,
-  genReadme,
-  genGitignore,
-  genTsconfigJson,
-  cfgHusky,
-  genEditorconfig,
-} from "./generators";
-import { getModuleRoot, ModuleRoot } from "./utils";
-
-import type { GenPackageJsonOptions } from "./generators";
+import { Maker } from "./models/Maker";
 
 interface Options {
   target: string;
@@ -44,48 +34,12 @@ function parseOptions(): Options {
 }
 
 export async function main() {
-  // globally set module root path
-  new ModuleRoot(getModuleRoot(__dirname));
+  const cliOptions = parseOptions();
+  const { target: projectRoot } = cliOptions;
 
-  const options = parseOptions();
+  const maker = new Maker({ moduleRoot: Maker.getModuleRoot(__dirname) });
 
-  const { target: projectRoot } = options;
+  await maker.mvpRepo();
 
-  // to organize - paths
-
-  const packageJsonPath = path.resolve(projectRoot, "package.json");
-  const readmePath = path.resolve(projectRoot, "README.md");
-  const gitignorePath = path.resolve(projectRoot, ".gitignore");
-  const tsconfigJsonPath = path.resolve(projectRoot, "tsconfig.json");
-  const editorconfigPath = path.resolve(projectRoot, ".editorconfig");
-
-  // to compute - configs
-
-  const packageJsonOption: GenPackageJsonOptions = {
-    deps: {},
-    devDeps: {},
-    cfgs: {},
-  };
-
-  // typescript
-  packageJsonOption.devDeps.typescript = "latest";
-
-  // husky
-  const { cfgs: cfgsFromHusky, deps: depsFromHusky } = cfgHusky({
-    hooks: ["commit-msg", "pre-commit"],
-  });
-  depsFromHusky.forEach((dep) => {
-    packageJsonOption.devDeps[dep] = "latest";
-  });
-  Object.keys(cfgsFromHusky).forEach((key) => {
-    packageJsonOption.cfgs[key] = cfgsFromHusky[key];
-  });
-
-  // to write
-
-  await genPackageJson(packageJsonPath, packageJsonOption);
-  await genReadme(readmePath);
-  await genGitignore(gitignorePath);
-  await genTsconfigJson(tsconfigJsonPath);
-  await genEditorconfig(editorconfigPath);
+  await maker.output(projectRoot);
 }

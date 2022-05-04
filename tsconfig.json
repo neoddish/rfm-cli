@@ -13,9 +13,7 @@
     "importHelpers": true,
     "pretty": true,
     "lib": ["ES2017"],
-    "skipLibCheck": true,
-    "sourceRoot": "src",
-    "baseUrl": "."
+    "skipLibCheck": true
   },
   "include": ["src"],
   "exclude": ["node_modules"]
