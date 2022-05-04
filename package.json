@@ -1,7 +1,7 @@
 {
   "name": "rfm-cli",
-  "version": "0.1.0-alpha.1",
-  "description": "React Frontend Maker or Rim Forming Machine...",
+  "version": "0.1.0-alpha.2",
+  "description": "rfm(Rim Forming Machine) - CLI Scaffold for quick project kickoff.",
   "main": "src/index.js",
   "bin": {
     "rfm-cli": "bin/main.js"
