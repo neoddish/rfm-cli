@@ -4,25 +4,25 @@ import { File } from "../models/File";
 
 import type { ToolOptions } from "../models/Tool";
 
-export class TypescriptTool extends Tool {
-  static toolName: string = "typescript";
+export class PrettierTool extends Tool {
+  static toolName: string = "prettier";
 
   constructor() {
-    super(TypescriptTool.toolName);
+    super(PrettierTool.toolName);
   }
 
   static async create(templateLib: TemplateLib) {
     const toolOpts: ToolOptions = {
-      devDeps: [{ name: TypescriptTool.toolName }],
+      devDeps: [{ name: PrettierTool.toolName }],
       configFiles: [
         await File.newFileBySource(
-          "tsconfig.json",
-          templateLib.absPathByToken(TemplateLib.TOKEN.TSCONFIG_JSON.DEFAULT)
+          ".prettierrc.js",
+          templateLib.absPathByToken(TemplateLib.TOKEN.PRETTIERRC_JS.DEFAULT)
         ),
       ],
     };
 
-    const newTool = new TypescriptTool();
+    const newTool = new PrettierTool();
     newTool.init(toolOpts);
 
     return newTool;

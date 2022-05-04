@@ -7,7 +7,7 @@ export class TemplateLib {
     PACKAGE_JSON: {
       DEFAULT: "package-json/package.json",
     },
-    README: {
+    README_MD: {
       DEFAULT: "readme-md/readme.md",
     },
     GITIGNORE: {
@@ -19,6 +19,15 @@ export class TemplateLib {
     },
     EDITORCONFIG: {
       DEFAULT: "editorconfig/.editorconfig",
+    },
+    ESLINTRC_JS: {
+      DEFAULT: "eslintrc-js/.eslintrc.js",
+    },
+    ESLINTIGNORE: {
+      DEFAULT: "eslintignore/.eslintignore",
+    },
+    PRETTIERRC_JS: {
+      DEFAULT: "prettierrc-js/.prettierrc.js",
     },
   };
 

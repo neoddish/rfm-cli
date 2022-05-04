@@ -4,6 +4,8 @@ import { File } from "./File";
 
 import { TypescriptTool } from "../tools/typescript";
 import { HuskyTool } from "../tools/husky";
+import { EslintTool } from "../tools/eslint";
+import { PrettierTool } from "../tools/prettier";
 
 export interface MakerParams {
   moduleRoot: string;
@@ -46,7 +48,7 @@ export class Maker {
     // README.md
     await this.registerTemplateFile(
       "README.md",
-      this.templateLib.absPathByToken(TemplateLib.TOKEN.README.DEFAULT),
+      this.templateLib.absPathByToken(TemplateLib.TOKEN.README_MD.DEFAULT),
       repo,
       "./"
     );
@@ -60,9 +62,7 @@ export class Maker {
     );
 
     // typescript
-    const typescriptTool = await TypescriptTool.createWithTemplateLib(
-      this.templateLib
-    );
+    const typescriptTool = await TypescriptTool.create(this.templateLib);
     await typescriptTool.dispatch(repo);
 
     // husky
@@ -70,6 +70,14 @@ export class Maker {
       hooks: ["commit-msg", "pre-commit"],
     });
     await huskyTool.dispatch(repo);
+
+    // eslint
+    const eslintTool = await EslintTool.create(this.templateLib);
+    await eslintTool.dispatch(repo);
+
+    // prettier
+    const prettierTool = await PrettierTool.create(this.templateLib);
+    await prettierTool.dispatch(repo);
 
     this.repo = repo;
   }

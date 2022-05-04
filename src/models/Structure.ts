@@ -4,7 +4,7 @@ import lodashSet from "lodash/set";
 
 import { File } from "./File";
 
-const DOT_SUB = "!";
+const DOT_SUB = `!<#>!`;
 
 export class Structure {
   protected tree: any;
@@ -17,8 +17,8 @@ export class Structure {
     const filename = file.filename;
     const dotPath = path
       .join("root", dir, filename)
-      .replace(".", DOT_SUB)
-      .replace("/", ".");
+      .replace(/\./g, DOT_SUB)
+      .replace(/\//g, ".");
 
     lodashSet(this.tree, dotPath, file);
   }
@@ -29,7 +29,8 @@ export class Structure {
     getFromTree(this.tree.root, list, "");
 
     const formattedList = list.map(({ path, file }) => {
-      return { path: path.replace(DOT_SUB, "."), file: file };
+      const re = new RegExp(DOT_SUB, "g");
+      return { path: path.replace(re, "."), file: file };
     });
 
     return formattedList;
