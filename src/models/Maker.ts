@@ -62,6 +62,16 @@ export class Maker {
       "./"
     );
 
+    // src
+    await repo.addFile(
+      "./src",
+      new File(
+        "index.ts",
+        `export const greeting = 'hello world!';
+`
+      )
+    );
+
     // typescript
     const typescriptTool = await TypescriptTool.create(this.templateLib);
     await typescriptTool.dispatch(repo);
