@@ -1,4 +1,5 @@
 import { Tool } from "../models/Tool";
+import { File } from "../models/File";
 
 import type { ToolOptions, PackageJsonScript } from "../models/Tool";
 
@@ -24,7 +25,8 @@ export class HuskyTool extends Tool {
         case "commit-msg":
           configs.husky.hook["commit-msg"] =
             'npx --no-install commitlint --edit "$1"';
-          deps.push({ name: "commitlint" });
+          deps.push({ name: "@commitlint/cli" });
+          deps.push({ name: "@commitlint/config-conventional" });
           break;
 
         case "pre-commit":
@@ -37,6 +39,21 @@ export class HuskyTool extends Tool {
       }
     });
 
+    const configFiles = [];
+
+    // if commitlint
+    if (
+      deps.find((dep) => dep.name === "@commitlint/cli") &&
+      deps.find((dep) => dep.name === "@commitlint/config-conventional")
+    ) {
+      const commitlintFile = new File(
+        "commitlint.config.js",
+        `module.exports = { extends: ['@commitlint/config-conventional'] };
+`
+      );
+      configFiles.push({ file: commitlintFile });
+    }
+
     // "prepare": "husky install"
     const script: PackageJsonScript = {
       scriptName: "prepare",
@@ -48,6 +65,7 @@ export class HuskyTool extends Tool {
       devDeps: [{ name: HuskyTool.toolName }, ...deps],
       packageJsonConfig: configs,
       packageJsonScripts: [script],
+      configFiles: configFiles,
     };
 
     const newTool = new HuskyTool();
