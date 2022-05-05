@@ -32,12 +32,12 @@ export class RollupTool extends Tool {
     const sizeConfig = {
       "limit-size": [
         {
-          path: "dist/color-schema.min.js",
+          path: "dist/index.min.js",
           limit: "8 Kb",
           gzip: true,
         },
         {
-          path: "dist/color-schema.min.js",
+          path: "dist/index.min.js",
           limit: "24 Kb",
         },
       ],

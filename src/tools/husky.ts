@@ -54,6 +54,17 @@ export class HuskyTool extends Tool {
       configFiles.push({ file: commitlintFile });
     }
 
+    // if lint-staged
+    if (deps.find((dep) => dep.name === "lint-staged")) {
+      configs["lint-staged"] = {
+        "*.{js,jsx,ts,tsx}": [
+          "eslint --fix",
+          "prettier --write",
+          "jest --bail --findRelatedTests",
+        ],
+      };
+    }
+
     // "prepare": "husky install"
     const script: PackageJsonScript = {
       scriptName: "prepare",
