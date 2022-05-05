@@ -1,6 +1,7 @@
 import { readFile } from "fs/promises";
 
 import lodashSet from "lodash/set";
+import { sortPackageJson } from "sort-package-json";
 
 import { formatJSONObject } from "../utils";
 import { File } from "./File";
@@ -51,7 +52,9 @@ export class PackageManager {
   }
 
   getPackageJsonFile(): File {
-    return new File("package.json", formatJSONObject(this.contentObj));
+    const formatted = formatJSONObject(this.contentObj);
+    const sorted = sortPackageJson(formatted);
+    return new File("package.json", sorted);
   }
 
   addDep(name: string, version: string) {
