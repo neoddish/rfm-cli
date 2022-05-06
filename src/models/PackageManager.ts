@@ -8,6 +8,12 @@ import { formatJSONObject } from '../utils';
 import { File } from './File';
 import { TemplateLib } from './TemplateLib';
 
+export interface PackageJsonScript {
+  scriptName: string;
+  value: string;
+  mode: 'replace' | 'append';
+}
+
 export interface PackageManagerOptions {
   privatePackage?: boolean;
   deps?: any;

@@ -1,8 +1,9 @@
 import { TemplateLib } from '../models/TemplateLib';
-import { PackageJsonScript, Tool } from '../models/Tool';
+import { Tool } from '../models/Tool';
 import { File } from '../models/File';
 
 import type { ToolOptions } from '../models/Tool';
+import type { PackageJsonScript } from '../models/PackageManager';
 
 export class JestTool extends Tool {
   static toolName: string = 'jest';

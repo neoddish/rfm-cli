@@ -2,7 +2,8 @@ import { Tool } from '../models/Tool';
 import { TemplateLib } from '../models/TemplateLib';
 import { File } from '../models/File';
 
-import type { ToolOptions, PackageJsonScript } from '../models/Tool';
+import type { ToolOptions } from '../models/Tool';
+import type { PackageJsonScript } from '../models/PackageManager';
 
 export class TypescriptTool extends Tool {
   static toolName: string = 'typescript';

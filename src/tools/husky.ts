@@ -1,9 +1,11 @@
 import { Tool } from '../models/Tool';
 import { File } from '../models/File';
 
-import type { ToolOptions, PackageJsonScript } from '../models/Tool';
+import type { ToolOptions } from '../models/Tool';
+import type { PackageJsonScript } from '../models/PackageManager';
 
-type HuskyHook = 'pre-commit' | 'commit-msg';
+export const HUSK_HOOKS = ['pre-commit', 'commit-msg'] as const;
+export type HuskyHook = typeof HUSK_HOOKS[number];
 
 export interface HuskyCreateOptions {
   hooks: HuskyHook[];

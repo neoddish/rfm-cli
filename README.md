@@ -54,7 +54,7 @@ rfm-cli -t targetpath/of/newproject
 to v1: (issue <https://github.com/neoddish/rfm-cli/issues/2>)
 
 * [x] support exe shell after create repo
-* [ ] create repo by manifest
+* [x] create repo by manifest
 * [ ] support subrepo
 * [ ] support demo/site subrepo
 * [ ] better commands

@@ -5,6 +5,8 @@ import { program } from 'commander';
 
 import { Maker } from './models/Maker';
 
+import type { RepoManifest } from './models/Maker';
+
 interface Options {
   target: string;
   exec: boolean;
@@ -41,9 +43,35 @@ export async function main() {
 
   const maker = new Maker({ moduleRoot: Maker.getModuleRoot(__dirname) });
 
-  await maker.mvpRepo();
+  const mvpRepoManifest: RepoManifest = {
+    typescript: { in: true },
+    husky: { in: true, options: { selections: ['pre-commit', 'commit-msg'] } },
+    eslint: { in: true },
+    prettier: { in: true },
+    markdownlint: { in: true },
+    jest: { in: true },
+    rollup: { in: true },
+    packageJson: {
+      scripts: [
+        { scriptName: 'build', value: 'run-p build:*', mode: 'append' },
+        { scriptName: 'clean', value: 'rimraf lib esm dist', mode: 'append' },
+      ],
+      configs: [
+        { key: 'main', value: 'lib/index.js' },
+        { key: 'module', value: 'esm/index.js' },
+        { key: 'unpkg', value: 'dist/index.js' },
+        { key: 'files', value: ['src', 'esm', 'lib'] },
+      ],
+    },
+  };
 
-  await maker.output(projectRoot);
+  const repo = await maker.assemble(mvpRepoManifest);
+
+  repo.output(projectRoot);
+
+  // await maker.mvpRepo();
+
+  // await maker.output(projectRoot);
 
   if (execute) {
     const postcreateCommands = [

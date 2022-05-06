@@ -1,14 +1,56 @@
 import { TypescriptTool } from '../tools/typescript';
-import { HuskyTool } from '../tools/husky';
+import { HuskyTool, HUSK_HOOKS } from '../tools/husky';
 import { EslintTool } from '../tools/eslint';
 import { PrettierTool } from '../tools/prettier';
 import { JestTool } from '../tools/jest';
 import { RollupTool } from '../tools/rollup';
 import { MarkdownlintTool } from '../tools/markdownlint';
-
 import { File } from './File';
 import { TemplateLib } from './TemplateLib';
 import { Repo } from './Repo';
+
+import type { PackageJsonScript } from './PackageManager';
+import type { HuskyHook } from '../tools/husky';
+
+interface FileCast {
+  type?: 'file';
+  in: boolean;
+  options?: { category?: string; [x: string]: any };
+}
+
+interface FolderCast {
+  type?: 'folder';
+  in: boolean;
+  path: string;
+  children?: (FileCast | FolderCast)[];
+}
+
+interface ToolCast {
+  type?: 'tool';
+  in: boolean;
+  options?: { selections?: string[] };
+}
+
+interface PackageJsonCast {
+  type?: 'package-json';
+  scripts?: PackageJsonScript[];
+  configs?: { key: string; value: any }[];
+}
+
+export interface RepoManifest {
+  gitignore?: FileCast;
+  readme?: FileCast;
+  editorconfig?: FileCast;
+  src?: FolderCast;
+  typescript?: ToolCast;
+  husky?: ToolCast;
+  eslint?: ToolCast;
+  prettier?: ToolCast;
+  markdownlint?: ToolCast;
+  jest?: ToolCast;
+  rollup?: ToolCast;
+  packageJson?: PackageJsonCast;
+}
 
 export interface MakerParams {
   moduleRoot: string;
@@ -18,14 +60,8 @@ export class Maker {
   /** location of the rfm-cli lib */
   private moduleRoot: string;
 
-  /** location where this command is called */
-  private processCwd: string;
-
   /** where template paths stored */
   private templateLib: TemplateLib;
-
-  /** the repo to be created */
-  private repo: Repo | undefined;
 
   constructor(params: MakerParams) {
     if (!params?.moduleRoot) {
@@ -33,104 +69,154 @@ export class Maker {
     }
 
     this.moduleRoot = params.moduleRoot;
-    this.processCwd = process.cwd();
 
     this.templateLib = new TemplateLib(this.moduleRoot);
   }
 
-  async mvpRepo() {
+  async assemble(manifest: RepoManifest): Promise<Repo> {
     const repo = new Repo(this.templateLib);
-
     await repo.init();
 
+    /* =================== casts by default =================== */
+
     // .gitignore
-    await this.registerTemplateFile(
-      '.gitignore',
-      this.templateLib.absPathByToken(TemplateLib.TOKEN.GITIGNORE.PRO),
-      repo,
-      './'
-    );
+    if (!(manifest.gitignore?.in === false)) {
+      // default gitignore category = PRO
+      let category = manifest.gitignore?.options?.category || 'PRO';
+      if (!Object.keys(TemplateLib.TOKEN.GITIGNORE).includes(category)) {
+        console.warn(`gitignore DO NOT have category ${category}, changed to 'PRO' by default.`);
+        category = 'PRO';
+      }
+
+      await this.registerTemplateFile(
+        '.gitignore',
+        this.templateLib.absPathByToken((TemplateLib.TOKEN.GITIGNORE as any)[category]),
+        repo,
+        './'
+      );
+    }
 
     // README.md
-    await this.registerTemplateFile(
-      'README.md',
-      this.templateLib.absPathByToken(TemplateLib.TOKEN.README_MD.DEFAULT),
-      repo,
-      './'
-    );
+    if (!(manifest.readme?.in === false)) {
+      await this.registerTemplateFile(
+        'README.md',
+        this.templateLib.absPathByToken(TemplateLib.TOKEN.README_MD.DEFAULT),
+        repo,
+        './'
+      );
+    }
 
     // .editorconfig
-    await this.registerTemplateFile(
-      '.editorconfig',
-      this.templateLib.absPathByToken(TemplateLib.TOKEN.EDITORCONFIG.DEFAULT),
-      repo,
-      './'
-    );
+    if (!(manifest.editorconfig?.in === false)) {
+      await this.registerTemplateFile(
+        '.editorconfig',
+        this.templateLib.absPathByToken(TemplateLib.TOKEN.EDITORCONFIG.DEFAULT),
+        repo,
+        './'
+      );
+    }
 
-    // src
-    await repo.addFile(
-      './src',
-      new File(
-        'index.ts',
-        `export const greeting = 'hello world!';
+    // src/
+    if (!(manifest.src?.in === false)) {
+      console.log('hey');
+      await repo.addFile(
+        './src',
+        new File(
+          'index.ts',
+          `export const greeting = 'hello world!';
 `
-      )
-    );
+        )
+      );
+    } else {
+      console.log('no');
+
+      console.log(manifest.src?.in);
+    }
+
+    /* =================== casts by optional =================== */
+
+    // tools
 
     // typescript
-    const typescriptTool = await TypescriptTool.create(this.templateLib);
-    await typescriptTool.dispatch(repo);
+    if (manifest.typescript?.in) {
+      const typescriptTool = await TypescriptTool.create(this.templateLib);
+      await typescriptTool.dispatch(repo);
+    }
 
     // husky
-    const huskyTool = await HuskyTool.create({
-      hooks: ['commit-msg', 'pre-commit'],
-    });
-    await huskyTool.dispatch(repo);
+    if (manifest.husky?.in) {
+      const selections = manifest.husky.options?.selections;
+      const hooks: HuskyHook[] = [];
+      ((selections as HuskyHook[]) || []).forEach((hook) => {
+        if (HUSK_HOOKS.includes(hook as any)) {
+          hooks.push(hook);
+        } else {
+          console.warn(`Husky hook '${hook}' is not available.`);
+        }
+      });
+
+      if (hooks.length) {
+        const huskyTool = await HuskyTool.create({ hooks });
+        await huskyTool.dispatch(repo);
+      }
+    }
 
     // eslint
-    const eslintTool = await EslintTool.create(this.templateLib);
-    await eslintTool.dispatch(repo);
+    if (manifest.eslint?.in) {
+      const eslintTool = await EslintTool.create(this.templateLib);
+      await eslintTool.dispatch(repo);
+    }
 
     // prettier
-    const prettierTool = await PrettierTool.create(this.templateLib);
-    await prettierTool.dispatch(repo);
+    if (manifest.prettier?.in) {
+      const prettierTool = await PrettierTool.create(this.templateLib);
+      await prettierTool.dispatch(repo);
+    }
 
     // markdownlint
-    const markdownlintTool = await MarkdownlintTool.create(this.templateLib);
-    await markdownlintTool.dispatch(repo);
+    if (manifest.markdownlint?.in) {
+      const markdownlintTool = await MarkdownlintTool.create(this.templateLib);
+      await markdownlintTool.dispatch(repo);
+    }
 
     // jest
-    const jestTool = await JestTool.create(this.templateLib);
-    await jestTool.dispatch(repo);
+    if (manifest.jest?.in) {
+      const jestTool = await JestTool.create(this.templateLib);
+      await jestTool.dispatch(repo);
+    }
 
     // rollup
-    const rollupTool = await RollupTool.create(this.templateLib);
-    await rollupTool.dispatch(repo);
+    if (manifest.rollup?.in) {
+      const rollupTool = await RollupTool.create(this.templateLib);
+      await rollupTool.dispatch(repo);
+    }
 
-    // build
+    /* =================== package.json =================== */
+
     // todo manifest: if lib or esm or dist
 
-    // "build": "run-p build:*",
-    repo.packageManager.updateScript('build', 'run-p build:*', 'append');
-    // "clean": "rimraf lib esm dist",
-    repo.packageManager.updateScript('clean', 'rimraf lib esm dist', 'append');
+    // package.json scripts
 
-    repo.packageManager.overwriteJson('main', 'lib/index.js');
-    repo.packageManager.overwriteJson('module', 'esm/index.js');
-    repo.packageManager.overwriteJson('unpkg', 'dist/index.js');
-    repo.packageManager.overwriteJson('files', ['src', 'esm', 'lib']);
-
-    // set repo
-
-    this.repo = repo;
-  }
-
-  async output(outputRoot: string) {
-    if (this.repo) {
-      await this.repo.output(outputRoot);
-    } else {
-      throw new Error('repo has not been initialized!');
+    const scripts = manifest.packageJson?.scripts;
+    if (scripts?.length) {
+      scripts.forEach((script) => {
+        const { scriptName, value, mode } = script;
+        repo.packageManager.updateScript(scriptName, value, mode);
+      });
     }
+
+    // package.json configs
+    const configs = manifest.packageJson?.configs;
+    if (configs?.length) {
+      configs.forEach((config) => {
+        const { key, value } = config;
+        repo.packageManager.overwriteJson(key, value);
+      });
+    }
+
+    // result Repo
+
+    return repo;
   }
 
   async registerTemplateFile(filename: string, template: string, repo: Repo, dir: string) {

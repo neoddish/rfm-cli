@@ -1,11 +1,7 @@
 import { File } from './File';
 import { Repo } from './Repo';
 
-export type PackageJsonScript = {
-  scriptName: string;
-  value: string;
-  mode: 'replace' | 'append';
-};
+import type { PackageJsonScript } from './PackageManager';
 
 export interface ToolOptions {
   deps?: { name: string; version?: string }[];
