@@ -19,6 +19,18 @@ npm install -g rfm-cli
 rfm-cli -t targetpath/of/newproject
 ```
 
+### Configuration
+
+```text
+$ rfm-cli --help
+Usage: rfm-cli [options]
+
+Options:
+  -t, --target <path>  path to create project
+  -e, --exec           execute scripts after project created (default: false)
+  -h, --help           display help for command
+```
+
 ## Dev
 
 ```bash
@@ -39,9 +51,9 @@ rfm-cli -t targetpath/of/newproject
 
 ## TODO
 
-to v1: (issue https://github.com/neoddish/rfm-cli/issues/2)
+to v1: (issue <https://github.com/neoddish/rfm-cli/issues/2>)
 
-* [ ] support exe shell after create repo
+* [x] support exe shell after create repo
 * [ ] create repo by manifest
 * [ ] support subrepo
 * [ ] support demo/site subrepo

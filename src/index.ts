@@ -1,4 +1,5 @@
 import path from "path";
+import { spawn } from "child_process";
 
 import { program } from "commander";
 
@@ -6,6 +7,7 @@ import { Maker } from "./models/Maker";
 
 interface Options {
   target: string;
+  exec: boolean;
 }
 
 function parseOptions(): Options {
@@ -16,7 +18,9 @@ function parseOptions(): Options {
     return path.resolve(process.cwd(), value);
   }
 
-  program.option("-t, --target <path>", "path to create project", parseTarget);
+  program
+    .option("-t, --target <path>", "path to create project", parseTarget)
+    .option("-e, --exec", "execute scripts after project created", false);
 
   program.parse();
 
@@ -35,11 +39,29 @@ function parseOptions(): Options {
 
 export async function main() {
   const cliOptions = parseOptions();
-  const { target: projectRoot } = cliOptions;
+  const { target: projectRoot, exec: execute } = cliOptions;
 
   const maker = new Maker({ moduleRoot: Maker.getModuleRoot(__dirname) });
 
   await maker.mvpRepo();
 
   await maker.output(projectRoot);
+
+  if (execute) {
+    const postcreateCommands = [
+      `cd ${projectRoot}`,
+      "git init",
+      "npm install",
+      "npm run lint-fix",
+      "npm run format",
+      "npm run test",
+      "npm run build",
+    ].join(" && ");
+
+    const result = spawn(postcreateCommands, { stdio: "inherit", shell: true });
+
+    result.on("close", (code) => {
+      console.log(`child process exited with code ${code}`);
+    });
+  }
 }
