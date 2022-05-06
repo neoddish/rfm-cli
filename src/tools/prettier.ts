@@ -1,11 +1,11 @@
-import { Tool } from "../models/Tool";
-import { TemplateLib } from "../models/TemplateLib";
-import { File } from "../models/File";
+import { Tool } from '../models/Tool';
+import { TemplateLib } from '../models/TemplateLib';
+import { File } from '../models/File';
 
-import type { ToolOptions, PackageJsonScript } from "../models/Tool";
+import type { ToolOptions, PackageJsonScript } from '../models/Tool';
 
 export class PrettierTool extends Tool {
-  static toolName: string = "prettier";
+  static toolName: string = 'prettier';
 
   constructor() {
     super(PrettierTool.toolName);
@@ -17,15 +17,15 @@ export class PrettierTool extends Tool {
     const scripts: PackageJsonScript[] = [
       // "format": "prettier --write \"src/**/*.ts\" \"__tests__/**/*.ts\"",
       {
-        scriptName: "format",
+        scriptName: 'format',
         value: 'prettier --write "src/**/*.ts" "__tests__/**/*.ts"',
-        mode: "replace",
+        mode: 'replace',
       },
       // "format-check": "prettier ./src/**/*.ts ./__tests__/**/*.ts --check",
       {
-        scriptName: "format-check",
-        value: "prettier ./src/**/*.ts ./__tests__/**/*.ts --check",
-        mode: "replace",
+        scriptName: 'format-check',
+        value: 'prettier ./src/**/*.ts ./__tests__/**/*.ts --check',
+        mode: 'replace',
       },
     ];
 
@@ -35,7 +35,7 @@ export class PrettierTool extends Tool {
       configFiles: [
         {
           file: await File.newFileBySource(
-            ".prettierrc.js",
+            '.prettierrc.js',
             templateLib.absPathByToken(TemplateLib.TOKEN.PRETTIERRC_JS.DEFAULT)
           ),
         },

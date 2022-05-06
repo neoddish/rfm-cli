@@ -1,14 +1,14 @@
-import { Repo } from "./Repo";
-import { TemplateLib } from "./TemplateLib";
-import { File } from "./File";
+import { TypescriptTool } from '../tools/typescript';
+import { HuskyTool } from '../tools/husky';
+import { EslintTool } from '../tools/eslint';
+import { PrettierTool } from '../tools/prettier';
+import { JestTool } from '../tools/jest';
+import { RollupTool } from '../tools/rollup';
+import { MarkdownlintTool } from '../tools/markdownlint';
 
-import { TypescriptTool } from "../tools/typescript";
-import { HuskyTool } from "../tools/husky";
-import { EslintTool } from "../tools/eslint";
-import { PrettierTool } from "../tools/prettier";
-import { JestTool } from "../tools/jest";
-import { RollupTool } from "../tools/rollup";
-import { MarkdownlintTool } from "../tools/markdownlint";
+import { File } from './File';
+import { TemplateLib } from './TemplateLib';
+import { Repo } from './Repo';
 
 export interface MakerParams {
   moduleRoot: string;
@@ -17,16 +17,19 @@ export interface MakerParams {
 export class Maker {
   /** location of the rfm-cli lib */
   private moduleRoot: string;
+
   /** location where this command is called */
   private processCwd: string;
+
   /** where template paths stored */
   private templateLib: TemplateLib;
+
   /** the repo to be created */
   private repo: Repo | undefined;
 
   constructor(params: MakerParams) {
     if (!params?.moduleRoot) {
-      throw new Error("MUST assign module root path for Maker!");
+      throw new Error('MUST assign module root path for Maker!');
     }
 
     this.moduleRoot = params.moduleRoot;
@@ -42,33 +45,33 @@ export class Maker {
 
     // .gitignore
     await this.registerTemplateFile(
-      ".gitignore",
+      '.gitignore',
       this.templateLib.absPathByToken(TemplateLib.TOKEN.GITIGNORE.PRO),
       repo,
-      "./"
+      './'
     );
 
     // README.md
     await this.registerTemplateFile(
-      "README.md",
+      'README.md',
       this.templateLib.absPathByToken(TemplateLib.TOKEN.README_MD.DEFAULT),
       repo,
-      "./"
+      './'
     );
 
     // .editorconfig
     await this.registerTemplateFile(
-      ".editorconfig",
+      '.editorconfig',
       this.templateLib.absPathByToken(TemplateLib.TOKEN.EDITORCONFIG.DEFAULT),
       repo,
-      "./"
+      './'
     );
 
     // src
     await repo.addFile(
-      "./src",
+      './src',
       new File(
-        "index.ts",
+        'index.ts',
         `export const greeting = 'hello world!';
 `
       )
@@ -80,7 +83,7 @@ export class Maker {
 
     // husky
     const huskyTool = await HuskyTool.create({
-      hooks: ["commit-msg", "pre-commit"],
+      hooks: ['commit-msg', 'pre-commit'],
     });
     await huskyTool.dispatch(repo);
 
@@ -108,14 +111,14 @@ export class Maker {
     // todo manifest: if lib or esm or dist
 
     // "build": "run-p build:*",
-    repo.packageManager.updateScript("build", "run-p build:*", "append");
+    repo.packageManager.updateScript('build', 'run-p build:*', 'append');
     // "clean": "rimraf lib esm dist",
-    repo.packageManager.updateScript("clean", "rimraf lib esm dist", "append");
+    repo.packageManager.updateScript('clean', 'rimraf lib esm dist', 'append');
 
-    repo.packageManager.overwriteJson("main", "lib/index.js");
-    repo.packageManager.overwriteJson("module", "esm/index.js");
-    repo.packageManager.overwriteJson("unpkg", "dist/index.js");
-    repo.packageManager.overwriteJson("files", ["src", "esm", "lib"]);
+    repo.packageManager.overwriteJson('main', 'lib/index.js');
+    repo.packageManager.overwriteJson('module', 'esm/index.js');
+    repo.packageManager.overwriteJson('unpkg', 'dist/index.js');
+    repo.packageManager.overwriteJson('files', ['src', 'esm', 'lib']);
 
     // set repo
 
@@ -126,16 +129,11 @@ export class Maker {
     if (this.repo) {
       await this.repo.output(outputRoot);
     } else {
-      throw new Error("repo has not been initialized!");
+      throw new Error('repo has not been initialized!');
     }
   }
 
-  async registerTemplateFile(
-    filename: string,
-    template: string,
-    repo: Repo,
-    dir: string
-  ) {
+  async registerTemplateFile(filename: string, template: string, repo: Repo, dir: string) {
     const file = await File.newFileBySource(filename, template);
     repo.addFile(dir, file);
   }
@@ -149,10 +147,10 @@ export class Maker {
    */
   static getModuleRoot(loDirname: string) {
     let moduleRootPath = loDirname;
-    if (loDirname.endsWith("/lib/src")) {
-      moduleRootPath = loDirname.replace(/\/lib\/src$/, "");
-    } else if (loDirname.endsWith("/lib")) {
-      moduleRootPath = loDirname.replace(/\/lib$/, "");
+    if (loDirname.endsWith('/lib/src')) {
+      moduleRootPath = loDirname.replace(/\/lib\/src$/, '');
+    } else if (loDirname.endsWith('/lib')) {
+      moduleRootPath = loDirname.replace(/\/lib$/, '');
     }
 
     return moduleRootPath;
