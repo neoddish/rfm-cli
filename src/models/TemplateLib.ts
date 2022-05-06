@@ -1,42 +1,42 @@
-import path from "path";
+import path from 'path';
 
 export class TemplateLib {
-  static TEMPLATE_ROOT = "templates";
+  static TEMPLATE_ROOT = 'templates';
 
   static TOKEN = {
     PACKAGE_JSON: {
-      DEFAULT: "package-json/package.json",
+      DEFAULT: 'package-json/package.json',
     },
     README_MD: {
-      DEFAULT: "readme-md/readme.md",
+      DEFAULT: 'readme-md/readme.md',
     },
     GITIGNORE: {
-      LITE: "gitignore/gitignore-lite",
-      PRO: "gitignore/gitignore-pro",
+      LITE: 'gitignore/gitignore-lite',
+      PRO: 'gitignore/gitignore-pro',
     },
     TSCONFIG_JSON: {
-      DEFAULT: "tsconfig-json/tsconfig.json",
+      DEFAULT: 'tsconfig-json/tsconfig.json',
     },
     EDITORCONFIG: {
-      DEFAULT: "editorconfig/.editorconfig",
+      DEFAULT: 'editorconfig/.editorconfig',
     },
     ESLINTRC_JS: {
-      DEFAULT: "eslintrc-js/.eslintrc.js",
+      DEFAULT: 'eslintrc-js/.eslintrc.js',
     },
     ESLINTIGNORE: {
-      DEFAULT: "eslintignore/.eslintignore",
+      DEFAULT: 'eslintignore/.eslintignore',
     },
     PRETTIERRC_JS: {
-      DEFAULT: "prettierrc-js/.prettierrc.js",
+      DEFAULT: 'prettierrc-js/.prettierrc.js',
     },
     JEST_CONFIG_JS: {
-      DEFAULT: "jest-config-js/jest.config.js",
+      DEFAULT: 'jest-config-js/jest.config.js',
     },
     ROLLUP_CONFIG_JS: {
-      DEFAULT: "rollup-config-js/rollup.config.js",
+      DEFAULT: 'rollup-config-js/rollup.config.js',
     },
     MARKDOWNLINT_JSON: {
-      DEFAULT: "markdownlint-json/.markdownlint.json",
+      DEFAULT: 'markdownlint-json/.markdownlint.json',
     },
   };
 

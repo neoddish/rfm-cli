@@ -1,9 +1,9 @@
-import path from "path";
-import { spawn } from "child_process";
+import path from 'path';
+import { spawn } from 'child_process';
 
-import { program } from "commander";
+import { program } from 'commander';
 
-import { Maker } from "./models/Maker";
+import { Maker } from './models/Maker';
 
 interface Options {
   target: string;
@@ -11,16 +11,16 @@ interface Options {
 }
 
 function parseOptions(): Options {
-  function parseTarget(value: string, _: any) {
-    if (value.startsWith("/")) {
+  function parseTarget(value: string) {
+    if (value.startsWith('/')) {
       return value;
     }
     return path.resolve(process.cwd(), value);
   }
 
   program
-    .option("-t, --target <path>", "path to create project", parseTarget)
-    .option("-e, --exec", "execute scripts after project created", false);
+    .option('-t, --target <path>', 'path to create project', parseTarget)
+    .option('-e, --exec', 'execute scripts after project created', false);
 
   program.parse();
 
@@ -29,9 +29,7 @@ function parseOptions(): Options {
   const { target } = options;
 
   if (!target) {
-    throw new Error(
-      "MUST define a target path for new project by -t or --target argument."
-    );
+    throw new Error('MUST define a target path for new project by -t or --target argument.');
   }
 
   return options;
@@ -50,17 +48,17 @@ export async function main() {
   if (execute) {
     const postcreateCommands = [
       `cd ${projectRoot}`,
-      "git init",
-      "npm install",
-      "npm run lint-fix",
-      "npm run format",
-      "npm run test",
-      "npm run build",
-    ].join(" && ");
+      'git init',
+      'npm install',
+      'npm run lint-fix',
+      'npm run format',
+      'npm run test',
+      'npm run build',
+    ].join(' && ');
 
-    const result = spawn(postcreateCommands, { stdio: "inherit", shell: true });
+    const result = spawn(postcreateCommands, { stdio: 'inherit', shell: true });
 
-    result.on("close", (code) => {
+    result.on('close', (code) => {
       console.log(`child process exited with code ${code}`);
     });
   }

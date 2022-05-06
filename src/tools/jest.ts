@@ -1,11 +1,11 @@
-import { TemplateLib } from "../models/TemplateLib";
-import { PackageJsonScript, Tool } from "../models/Tool";
-import { File } from "../models/File";
+import { TemplateLib } from '../models/TemplateLib';
+import { PackageJsonScript, Tool } from '../models/Tool';
+import { File } from '../models/File';
 
-import type { ToolOptions } from "../models/Tool";
+import type { ToolOptions } from '../models/Tool';
 
 export class JestTool extends Tool {
-  static toolName: string = "jest";
+  static toolName: string = 'jest';
 
   constructor() {
     super(JestTool.toolName);
@@ -15,16 +15,16 @@ export class JestTool extends Tool {
     const scripts: PackageJsonScript[] = [
       // "test": "jest",
       {
-        scriptName: "test",
-        value: "jest",
-        mode: "replace",
+        scriptName: 'test',
+        value: 'jest',
+        mode: 'replace',
       },
     ];
 
-    const eslintDevDepsArr = ["@types/jest", "ts-jest"];
+    const eslintDevDepsArr = ['@types/jest', 'ts-jest'];
 
     const eslintDevDeps = eslintDevDepsArr.map((name) => {
-      return { name: name };
+      return { name };
     });
 
     const toolOpts: ToolOptions = {
@@ -33,13 +33,13 @@ export class JestTool extends Tool {
       configFiles: [
         {
           file: await File.newFileBySource(
-            "jest.config.js",
+            'jest.config.js',
             templateLib.absPathByToken(TemplateLib.TOKEN.JEST_CONFIG_JS.DEFAULT)
           ),
         },
         {
           file: File.newFileByContent(
-            "index.test.ts",
+            'index.test.ts',
             `describe('init test', () => {
   test('good start', () => {
     expect(1+1).toBe(2);
@@ -47,7 +47,7 @@ export class JestTool extends Tool {
 })
           `
           ),
-          dir: "./__tests__",
+          dir: './__tests__',
         },
       ],
     };

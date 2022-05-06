@@ -1,9 +1,10 @@
-import { stat, readFile } from "fs/promises";
+import { stat, readFile } from 'fs/promises';
 
-import { pathExists } from "fs-extra";
+import { pathExists } from 'fs-extra';
 
 export class File {
   private _filename: string;
+
   private _content: string;
 
   constructor(filename: string, content: string) {
@@ -18,10 +19,7 @@ export class File {
   /**
    * new file by read and copy an exist file
    */
-  static async newFileBySource(
-    filename: string,
-    sourcePath: string
-  ): Promise<File> {
+  static async newFileBySource(filename: string, sourcePath: string): Promise<File> {
     const sourceExists = await pathExists(sourcePath);
     if (!sourceExists) {
       throw new Error(`Source file ${sourcePath} NOT FOUND!`);
@@ -32,7 +30,7 @@ export class File {
       throw new Error(`Source ${sourcePath} is NOT a file!`);
     }
 
-    const contentStr = await readFile(sourcePath, "utf-8");
+    const contentStr = await readFile(sourcePath, 'utf-8');
 
     return new File(filename, contentStr);
   }

@@ -1,11 +1,12 @@
-import { readFile } from "fs/promises";
+import { readFile } from 'fs/promises';
 
-import lodashSet from "lodash/set";
-import { sortPackageJson } from "sort-package-json";
+import lodashSet from 'lodash/set';
+import { sortPackageJson } from 'sort-package-json';
 
-import { formatJSONObject } from "../utils";
-import { File } from "./File";
-import { TemplateLib } from "./TemplateLib";
+import { formatJSONObject } from '../utils';
+
+import { File } from './File';
+import { TemplateLib } from './TemplateLib';
 
 export interface PackageManagerOptions {
   privatePackage?: boolean;
@@ -16,6 +17,7 @@ export interface PackageManagerOptions {
 
 export class PackageManager {
   private templateLib: TemplateLib;
+
   private contentObj: any;
 
   constructor(templateLib: TemplateLib) {
@@ -24,15 +26,12 @@ export class PackageManager {
 
   async init(options?: PackageManagerOptions) {
     // defaults
-    const privatePackage = options?.privatePackage === true ? true : false;
+    const privatePackage = options?.privatePackage === true;
     const deps = options?.deps || {};
     const devDeps = options?.devDeps || {};
     const cfgs = options?.cfgs || [];
 
-    const contentStr = await readFile(
-      this.templateLib.absPathByToken(TemplateLib.TOKEN.PACKAGE_JSON.DEFAULT),
-      "utf-8"
-    );
+    const contentStr = await readFile(this.templateLib.absPathByToken(TemplateLib.TOKEN.PACKAGE_JSON.DEFAULT), 'utf-8');
     const contentObj = JSON.parse(contentStr);
 
     if (privatePackage) {
@@ -54,7 +53,7 @@ export class PackageManager {
   getPackageJsonFile(): File {
     const formatted = formatJSONObject(this.contentObj);
     const sorted = sortPackageJson(formatted);
-    return new File("package.json", sorted);
+    return new File('package.json', sorted);
   }
 
   addDep(name: string, version: string) {
@@ -69,10 +68,10 @@ export class PackageManager {
     this.contentObj[key] = value;
   }
 
-  updateScript(scriptName: string, value: string, mode: "replace" | "append") {
+  updateScript(scriptName: string, value: string, mode: 'replace' | 'append') {
     const curScripts = this.contentObj.scripts;
     if (!curScripts) {
-      lodashSet(this.contentObj, "scripts", {});
+      lodashSet(this.contentObj, 'scripts', {});
     }
 
     const theScriptValue = curScripts[scriptName];
@@ -80,14 +79,10 @@ export class PackageManager {
     if (!theScriptValue) {
       lodashSet(this.contentObj, `scripts.${scriptName}`, value);
     } else {
-      if (mode === "append") {
-        lodashSet(
-          this.contentObj,
-          `scripts.${scriptName}`,
-          `${theScriptValue} && ${value}`
-        );
+      if (mode === 'append') {
+        lodashSet(this.contentObj, `scripts.${scriptName}`, `${theScriptValue} && ${value}`);
       }
-      if (mode === "replace") {
+      if (mode === 'replace') {
         lodashSet(this.contentObj, `scripts.${scriptName}`, value);
       }
     }
