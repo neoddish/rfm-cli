@@ -8,6 +8,7 @@ import { MarkdownlintTool } from '../tools/markdownlint';
 import { File } from './File';
 import { TemplateLib } from './TemplateLib';
 import { Repo } from './Repo';
+import { WebpackTool } from '../tools/webpack';
 
 import type { PackageJsonScript } from './PackageManager';
 import type { HuskyHook } from '../tools/husky';
@@ -49,6 +50,7 @@ export interface RepoManifest {
   markdownlint?: ToolCast;
   jest?: ToolCast;
   rollup?: ToolCast;
+  webpack?: ToolCast;
   packageJson?: PackageJsonCast;
 }
 
@@ -73,8 +75,8 @@ export class Maker {
     this.templateLib = new TemplateLib(this.moduleRoot);
   }
 
-  async assemble(manifest: RepoManifest): Promise<Repo> {
-    const repo = new Repo(this.templateLib);
+  async assemble(projectName: string, manifest: RepoManifest): Promise<Repo> {
+    const repo = new Repo(projectName, this.templateLib);
     await repo.init();
 
     /* =================== casts by default =================== */
@@ -118,7 +120,6 @@ export class Maker {
 
     // src/
     if (!(manifest.src?.in === false)) {
-      console.log('hey');
       await repo.addFile(
         './src',
         new File(
@@ -187,8 +188,14 @@ export class Maker {
 
     // rollup
     if (manifest.rollup?.in) {
-      const rollupTool = await RollupTool.create(this.templateLib);
+      const rollupTool = await RollupTool.create(this.templateLib, { projectName });
       await rollupTool.dispatch(repo);
+    }
+
+    // webpack
+    if (manifest.webpack?.in) {
+      const webpackTool = await WebpackTool.create(this.templateLib, { projectName });
+      await webpackTool.dispatch(repo);
     }
 
     /* =================== package.json =================== */

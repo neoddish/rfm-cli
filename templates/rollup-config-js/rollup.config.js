@@ -7,7 +7,7 @@ export default {
   input: 'src/index.ts',
   output: {
     file: 'dist/index.min.js',
-    name: 'MyProject',
+    name: 'PH_MY_PROJECT_NAME',
     format: 'umd',
     sourcemap: false,
   },

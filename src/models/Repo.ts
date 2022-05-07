@@ -8,14 +8,16 @@ import { File } from './File';
 import { TemplateLib } from './TemplateLib';
 
 export class Repo {
+  private name: string;
   private structure: Structure;
 
   /** manager for package.json */
   private _packageManager: PackageManager;
 
-  constructor(templateLib: TemplateLib) {
+  constructor(name: string, templateLib: TemplateLib) {
+    this.name = name;
     this.structure = new Structure();
-    this._packageManager = new PackageManager(templateLib);
+    this._packageManager = new PackageManager(name, templateLib);
   }
 
   async init() {
