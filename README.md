@@ -55,11 +55,11 @@ to v1: (issue <https://github.com/neoddish/rfm-cli/issues/2>)
 
 * [x] support exe shell after create repo
 * [x] create repo by manifest
+* [ ] support react
+* [ ] support webpack
 * [ ] support subrepo
 * [ ] support demo/site subrepo
 * [ ] better commands
-* [ ] support react
-* [ ] support webpack
 * [ ] support electron
 * [ ] lerna project
 * [ ] pretty commands

@@ -1,4 +1,5 @@
 import path from 'path';
+import { readFile } from 'fs/promises';
 
 export class TemplateLib {
   static TEMPLATE_ROOT = 'templates';
@@ -38,6 +39,12 @@ export class TemplateLib {
     MARKDOWNLINT_JSON: {
       DEFAULT: 'markdownlint-json/.markdownlint.json',
     },
+    WEBPACK_CONFIG_JS: {
+      DEFAULT: 'webpack-config-js/webpack.config.js',
+    },
+    PUBLIC__INDEX: {
+      DEFAULT: 'public/index.html',
+    },
   };
 
   private templateDir: string;
@@ -48,5 +55,11 @@ export class TemplateLib {
 
   absPathByToken(token: string) {
     return path.resolve(this.templateDir, token);
+  }
+
+  async getContentByToken(token: string): Promise<string> {
+    const absPath = this.absPathByToken(token);
+    const contentStr = await readFile(absPath, 'utf-8');
+    return contentStr;
   }
 }

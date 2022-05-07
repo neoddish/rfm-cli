@@ -22,11 +22,13 @@ export interface PackageManagerOptions {
 }
 
 export class PackageManager {
+  private name: string;
   private templateLib: TemplateLib;
 
   private contentObj: any;
 
-  constructor(templateLib: TemplateLib) {
+  constructor(name: string, templateLib: TemplateLib) {
+    this.name = name;
     this.templateLib = templateLib;
   }
 
@@ -39,6 +41,8 @@ export class PackageManager {
 
     const contentStr = await readFile(this.templateLib.absPathByToken(TemplateLib.TOKEN.PACKAGE_JSON.DEFAULT), 'utf-8');
     const contentObj = JSON.parse(contentStr);
+
+    contentObj.name = this.name;
 
     if (privatePackage) {
       contentObj.private = true;
