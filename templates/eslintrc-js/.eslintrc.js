@@ -25,6 +25,7 @@ module.exports = {
   rules: {
     semi: 'error',
     quotes: [1, 'single'],
+    'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx', '.tsx', '.ts'] }],
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
     'import/extensions': 'off',
@@ -43,10 +44,7 @@ module.exports = {
     'no-constant-condition': 0,
     '@typescript-eslint/explicit-function-return-type': 0,
     '@typescript-eslint/no-empty-function': 0,
-    '@typescript-eslint/explicit-member-accessibility': [
-      2,
-      { accessibility: 'no-public' },
-    ],
+    '@typescript-eslint/explicit-member-accessibility': [2, { accessibility: 'no-public' }],
     '@typescript-eslint/no-non-null-assertion': 0,
     '@typescript-eslint/no-namespace': 0,
     '@typescript-eslint/ban-ts-ignore': 0,
@@ -57,17 +55,7 @@ module.exports = {
     'import/order': [
       2,
       {
-        groups: [
-          'builtin',
-          'external',
-          'internal',
-          'parent',
-          'sibling',
-          'index',
-          'object',
-          'type',
-          'unknown',
-        ],
+        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object', 'type', 'unknown'],
         pathGroups: [
           {
             pattern: 'react',

@@ -13,10 +13,6 @@ const devConfig = {
     chunkFilename: '[chunkhash].js',
     publicPath: '/',
   },
-  externals: {
-    react: 'React',
-    'react-dom': 'ReactDOM',
-  },
   target: 'web',
   resolve: {
     extensions: ['.js', '.ts', '.tsx', '.json'],
@@ -68,11 +64,13 @@ const devConfig = {
     ],
   },
   devServer: {
-    disableHostCheck: true,
+    allowedHosts: 'all',
     host: '0.0.0.0',
     hot: true,
-    contentBase: path.join(__dirname, 'src'),
-    publicPath: '/',
+    static: {
+      directory: path.join(__dirname, 'src'),
+      publicPath: '/',
+    },
   },
   plugins: [
     new webpack.IgnorePlugin({ resourceRegExp: /^(fs|child_process)$/ }),

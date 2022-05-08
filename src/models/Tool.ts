@@ -82,6 +82,10 @@ export class Tool {
   }
 
   static DEP_VERSIONS: Record<string, string> = {
+    // dep
+    react: '^17.0.2',
+    'react-dom': '^17.0.2',
+    // devDep
     '@babel/plugin-proposal-class-properties': '^7.16.7',
     '@babel/plugin-proposal-object-rest-spread': '^7.17.3',
     '@babel/plugin-transform-runtime': '^7.17.0',

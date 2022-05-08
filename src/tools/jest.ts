@@ -41,11 +41,9 @@ export class JestTool extends Tool {
         {
           file: File.newFileByContent(
             'index.test.ts',
-            `import { greeting } from '../src';
-
-describe('init test', () => {
+            `describe('init test', () => {
   test('good start', () => {
-    expect(greeting).toBe('hello world!');
+    expect(1+1).toBe(2);
   });
 });
           `

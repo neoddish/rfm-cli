@@ -54,6 +54,7 @@ export class WebpackTool extends Tool {
       'less',
       'less-loader',
       'style-loader',
+      'npm-run-all',
     ];
 
     const webpackDevDeps = webpackDevDepsArr.map((name) => {
