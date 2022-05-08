@@ -45,11 +45,17 @@ export async function main() {
   const { target: projectRoot, preset, manifest: cusManifest, exec: execute } = cliOptions;
 
   const projectName = path.basename(projectRoot);
-  const cusManifestOptions = [...cusManifest]
+  let cusManifestOptions = [...cusManifest]
     .map((char) => {
       switch (char) {
         case 'w':
           return 'webpack';
+
+        case 'r':
+          return 'rollup';
+
+        case 'R':
+          return 'react';
 
         default:
           console.warn(`No sense for manifest chart ${char}.`);
@@ -57,6 +63,12 @@ export async function main() {
       }
     })
     .filter((e) => e !== 'BAD');
+
+  // overrides
+  // webpack will override default rollup
+  if (cusManifestOptions.includes('webpack')) {
+    cusManifestOptions = cusManifestOptions.filter((tool) => tool !== 'rollup');
+  }
 
   const defaultManifest: RepoManifest = (PRESETS as any)[preset] || PRESETS.mvp;
   const manifest: RepoManifest = { ...defaultManifest };

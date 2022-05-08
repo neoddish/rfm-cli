@@ -1,4 +1,5 @@
 import { TypescriptTool } from '../tools/typescript';
+import { ReactTool } from '../tools/react';
 import { HuskyTool, HUSK_HOOKS } from '../tools/husky';
 import { EslintTool } from '../tools/eslint';
 import { PrettierTool } from '../tools/prettier';
@@ -44,6 +45,7 @@ export interface RepoManifest {
   editorconfig?: FileCast;
   src?: FolderCast;
   typescript?: ToolCast;
+  react?: ToolCast;
   husky?: ToolCast;
   eslint?: ToolCast;
   prettier?: ToolCast;
@@ -119,7 +121,7 @@ export class Maker {
     }
 
     // src/
-    if (!(manifest.src?.in === false)) {
+    if (!(manifest.src?.in === false) && !manifest.react?.in) {
       await repo.addFile(
         './src',
         new File(
@@ -128,10 +130,6 @@ export class Maker {
 `
         )
       );
-    } else {
-      console.log('no');
-
-      console.log(manifest.src?.in);
     }
 
     /* =================== casts by optional =================== */
@@ -142,6 +140,12 @@ export class Maker {
     if (manifest.typescript?.in) {
       const typescriptTool = await TypescriptTool.create(this.templateLib);
       await typescriptTool.dispatch(repo);
+    }
+
+    // react
+    if (manifest.react?.in) {
+      const reactTool = await ReactTool.create(this.templateLib, { projectName });
+      await reactTool.dispatch(repo);
     }
 
     // husky
@@ -187,7 +191,8 @@ export class Maker {
     }
 
     // rollup
-    if (manifest.rollup?.in) {
+    // todo: refactor tool override relations
+    if (manifest.rollup?.in && !manifest.webpack?.in) {
       const rollupTool = await RollupTool.create(this.templateLib, { projectName });
       await rollupTool.dispatch(repo);
     }

@@ -45,6 +45,15 @@ export class TemplateLib {
     PUBLIC__INDEX: {
       DEFAULT: 'public/index.html',
     },
+    REACT_SRC: {
+      TS: {
+        APP_TSX: 'react-src/app.tsx',
+        INDEX_HTML: 'react-src/index.html',
+        INDEX_LESS: 'react-src/index.less',
+        INDEX_TSX: 'react-src/index.tsx',
+        TYPEINGS_D_TS: 'react-src/typings.d.ts',
+      },
+    },
   };
 
   private templateDir: string;
