@@ -26,9 +26,12 @@ $ rfm-cli --help
 Usage: rfm-cli [options]
 
 Options:
-  -t, --target <path>  path to create project
-  -e, --exec           execute scripts after project created (default: false)
-  -h, --help           display help for command
+  -t, --target <path>     path to create project
+  -p, --preset <preset>   create preset repo (default: "mvp")
+  -m, --manifest <chars>  manually set manifest (default: "")
+  -e, --exec              execute scripts after project created (default:
+                          false)
+  -h, --help              display help for command
 ```
 
 ## Dev
@@ -55,8 +58,8 @@ to v1: (issue <https://github.com/neoddish/rfm-cli/issues/2>)
 
 * [x] support exe shell after create repo
 * [x] create repo by manifest
-* [ ] support react
-* [ ] support webpack
+* [x] support react
+* [x] support webpack
 * [ ] support subrepo
 * [ ] support demo/site subrepo
 * [ ] better commands
