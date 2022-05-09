@@ -16,14 +16,14 @@ _-- It can greatly improve the efficiency of your [wheel](https://en.wikipedia.o
 
 ```bash
 npm install -g rfm-cli
-rfm-cli -t targetpath/of/newproject
+rfm -t targetpath/of/newproject
 ```
 
 ### Configuration
 
 ```text
-$ rfm-cli --help
-Usage: rfm-cli [options]
+$ rfm --help
+Usage: rfm [options]
 
 Options:
   -t, --target <path>     path to create project
@@ -49,7 +49,7 @@ npm run test-cli
 # test outer
 npm link
 cd where/you/want/to/create
-rfm-cli -t targetpath/of/newproject
+rfm -t targetpath/of/newproject
 ```
 
 ## TODO

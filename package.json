@@ -4,6 +4,7 @@
   "description": "rfm(Rim Forming Machine) - CLI Scaffold for quick project kickoff.",
   "main": "src/index.js",
   "bin": {
+    "rfm": "bin/main.js",
     "rfm-cli": "bin/main.js"
   },
   "files": [
@@ -15,7 +16,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "pre-test-cli": "npm link",
-    "test-cli": "rm -rf temp && rfm-cli -t temp/testRepo",
+    "test-cli": "rm -rf temp && rfm -t temp/testRepo",
     "format": "prettier --write \"src\"",
     "format-check": "prettier src --check",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx \"./\"",
