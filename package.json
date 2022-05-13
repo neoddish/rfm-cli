@@ -27,7 +27,8 @@
     "build-dev": "cross-env NODE_ENV=development run-s shebang build",
     "watch": "tsc -w",
     "watch-dev": "cross-env NODE_ENV=development run-s shebang watch",
-    "prepublishOnly": "cross-env NODE_ENV=production run-s shebang build"
+    "prepublishOnly": "cross-env NODE_ENV=production run-s shebang build",
+    "postpublish": "cross-env NODE_ENV=development npm run shebang"
   },
   "repository": {
     "type": "git",
