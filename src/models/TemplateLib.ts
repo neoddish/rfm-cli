@@ -47,11 +47,17 @@ export class TemplateLib {
     },
     REACT_SRC: {
       TS: {
-        APP_TSX: 'react-src/app.tsx',
-        INDEX_HTML: 'react-src/index.html',
-        INDEX_LESS: 'react-src/index.less',
-        INDEX_TSX: 'react-src/index.tsx',
-        TYPEINGS_D_TS: 'react-src/typings.d.ts',
+        APP_TSX: 'react-src/ts/app.tsx',
+        INDEX_HTML: 'react-src/ts/index.html',
+        INDEX_LESS: 'react-src/ts/index.less',
+        INDEX_TSX: 'react-src/ts/index.tsx',
+        TYPEINGS_D_TS: 'react-src/ts/typings.d.ts',
+      },
+      JS: {
+        APP_JSX: 'react-src/js/app.jsx',
+        INDEX_HTML: 'react-src/js/index.html',
+        INDEX_LESS: 'react-src/js/index.less',
+        INDEX_JSX: 'react-src/js/index.jsx',
       },
     },
   };

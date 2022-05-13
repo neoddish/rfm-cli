@@ -6,10 +6,11 @@ import { PrettierTool } from '../tools/prettier';
 import { JestTool } from '../tools/jest';
 import { RollupTool } from '../tools/rollup';
 import { MarkdownlintTool } from '../tools/markdownlint';
+import { WebpackTool } from '../tools/webpack';
+
 import { File } from './File';
 import { TemplateLib } from './TemplateLib';
 import { Repo } from './Repo';
-import { WebpackTool } from '../tools/webpack';
 
 import type { PackageJsonScript } from './PackageManager';
 import type { HuskyHook } from '../tools/husky';
@@ -122,10 +123,11 @@ export class Maker {
 
     // src/
     if (!(manifest.src?.in === false) && !manifest.react?.in) {
+      const ext = manifest.typescript?.in ? 'ts' : 'js';
       await repo.addFile(
         './src',
         new File(
-          'index.ts',
+          `index.${ext}`,
           `export const greeting = 'hello world!';
 `
         )
@@ -191,7 +193,6 @@ export class Maker {
     }
 
     // rollup
-    // todo: refactor tool override relations
     if (manifest.rollup?.in && !manifest.webpack?.in) {
       const rollupTool = await RollupTool.create(this.templateLib, { projectName });
       await rollupTool.dispatch(repo);
