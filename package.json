@@ -1,6 +1,6 @@
 {
   "name": "rfm-cli",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0-alpha.4",
   "description": "rfm(Rim Forming Machine) - CLI Scaffold for quick project kickoff.",
   "main": "src/index.js",
   "bin": {
