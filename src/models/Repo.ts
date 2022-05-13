@@ -9,6 +9,7 @@ import { TemplateLib } from './TemplateLib';
 
 export class Repo {
   private name: string;
+
   private structure: Structure;
 
   /** manager for package.json */

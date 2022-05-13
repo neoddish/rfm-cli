@@ -23,9 +23,10 @@ export interface PackageManagerOptions {
 
 export class PackageManager {
   private name: string;
+
   private templateLib: TemplateLib;
 
-  private contentObj: any;
+  private _contentObj: any;
 
   constructor(name: string, templateLib: TemplateLib) {
     this.name = name;
@@ -57,48 +58,52 @@ export class PackageManager {
       });
     }
 
-    this.contentObj = contentObj;
+    this._contentObj = contentObj;
+  }
+
+  get contentObj() {
+    return this._contentObj;
   }
 
   getPackageJsonFile(): File {
-    const formatted = formatJSONObject(this.contentObj);
+    const formatted = formatJSONObject(this._contentObj);
     const sorted = sortPackageJson(formatted);
     return new File('package.json', sorted);
   }
 
   addDep(name: string, version: string) {
-    this.contentObj.dependencies[name] = version;
+    this._contentObj.dependencies[name] = version;
   }
 
   addDevDep(name: string, version: string) {
-    this.contentObj.devDependencies[name] = version;
+    this._contentObj.devDependencies[name] = version;
   }
 
   addConfig(key: string, value: any) {
-    this.contentObj[key] = value;
+    this._contentObj[key] = value;
   }
 
   updateScript(scriptName: string, value: string, mode: 'replace' | 'append') {
-    const curScripts = this.contentObj.scripts;
+    const curScripts = this._contentObj.scripts;
     if (!curScripts) {
-      lodashSet(this.contentObj, 'scripts', {});
+      lodashSet(this._contentObj, 'scripts', {});
     }
 
     const theScriptValue = curScripts[scriptName];
 
     if (!theScriptValue) {
-      lodashSet(this.contentObj, `scripts.${scriptName}`, value);
+      lodashSet(this._contentObj, `scripts.${scriptName}`, value);
     } else {
       if (mode === 'append') {
-        lodashSet(this.contentObj, `scripts.${scriptName}`, `${theScriptValue} && ${value}`);
+        lodashSet(this._contentObj, `scripts.${scriptName}`, `${theScriptValue} && ${value}`);
       }
       if (mode === 'replace') {
-        lodashSet(this.contentObj, `scripts.${scriptName}`, value);
+        lodashSet(this._contentObj, `scripts.${scriptName}`, value);
       }
     }
   }
 
   overwriteJson(dotPath: string, value: any) {
-    lodashSet(this.contentObj, dotPath, value);
+    lodashSet(this._contentObj, dotPath, value);
   }
 }
